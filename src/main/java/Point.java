@@ -3,6 +3,10 @@
  *  For use on Coursera, Algorithms Part I programming assignment.
  ******************************************************************************/
 
+/*
+ *  An immutable data type for points in the plane.
+ *  For use on Coursera, Algorithms Part I programming assignment.
+ */
 import java.util.Comparator;
 import edu.princeton.cs.algs4.StdDraw;
 
@@ -52,8 +56,15 @@ public class Point implements Comparable<Point> {
      * @return the slope between this point and the specified point
      */
     public double slopeTo(Point that) {
-        // TODO: YOUR CODE HERE
-        return x;
+        if (that.x == this.x) {
+            if (that.y == this.y) {
+                return Double.NEGATIVE_INFINITY;
+            }
+            return Double.POSITIVE_INFINITY;
+        }
+
+        double slope = Double.valueOf(that.y - this.y) / (that.x - this.x); // the java type system is annoying, it should know to become a double when the variable im assigning it to is a double
+        return slope;
     }
 
     /**
@@ -66,9 +77,19 @@ public class Point implements Comparable<Point> {
      *         a negative integer if this point is less than the argument point;
      *         and a positive integer if this point is greater than the argument point
      */
-    public int compareTo(Point that) {
-        // TODO: YOUR CODE HERE
-      return 0;
+    public int compareTo(Point that) { // if only rust matching
+        if (this.y < that.y) {
+            return -1;
+        }
+        if (this.y == that.y) {
+            if (this.x == that.x) {
+                return 0;
+            }
+            if (this.x < that.x) {
+                return -1;
+            }
+        }
+        return 1;
     }
 
     /**
@@ -77,8 +98,16 @@ public class Point implements Comparable<Point> {
      * @return the Comparator that defines this ordering on points
      */
     public Comparator<Point> slopeOrder() {
-        // TODO: YOUR CODE HERE
-        return null;
+        return new Comparator<Point>() {
+            public int compare(Point arg0, Point arg1) {
+                if (Point.this.slopeTo(arg0) < Point.this.slopeTo(arg1)) {
+                    return -1;
+                } else if (Point.this.slopeTo(arg0) > Point.this.slopeTo(arg1)) {
+                    return 1;
+                }
+                return 0;
+            }
+        };
     }
 
 
